@@ -6,10 +6,10 @@ import a01.b02.partypeople.CommonProxy;
 import a01.b02.partypeople.client.renderer.RenderTickHandler;
 
 public class ClientProxy extends CommonProxy {
-@Override
-public void registerHandlers() {
-	super.registerHandlers();
-	RenderTickHandler renderTickHandler = new RenderTickHandler();
-	TickRegistry.registerTickHandler(renderTickHandler, Side.CLIENT);
-}
+	@Override
+	public void registerHandlers() {
+		super.registerHandlers();
+		RenderTickHandler renderTickHandler = new RenderTickHandler();
+		TickRegistry.registerTickHandler(renderTickHandler, Side.CLIENT);
+	}
 }
