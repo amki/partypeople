@@ -1,6 +1,11 @@
-package a01.b02.partypeople.server;
+package ca.a01.b02.partypeople.server;
 
 import java.util.List;
+
+import ca.a01.b02.partypeople.Party;
+import ca.a01.b02.partypeople.PartyHandler;
+import ca.a01.b02.partypeople.PartyModel;
+import ca.a01.b02.partypeople.PartyPeople;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.Player;
@@ -10,10 +15,6 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.NextTickListEntry;
-import a01.b02.partypeople.Party;
-import a01.b02.partypeople.PartyHandler;
-import a01.b02.partypeople.PartyModel;
-import a01.b02.partypeople.PartyPeople;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.terraingen.BiomeEvent.CreateDecorator;

@@ -1,9 +1,9 @@
-package a01.b02.partypeople.client;
+package ca.a01.b02.partypeople.client;
 
+import ca.a01.b02.partypeople.CommonProxy;
+import ca.a01.b02.partypeople.client.renderer.RenderTickHandler;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
-import a01.b02.partypeople.CommonProxy;
-import a01.b02.partypeople.client.renderer.RenderTickHandler;
 
 public class ClientProxy extends CommonProxy {
 	@Override

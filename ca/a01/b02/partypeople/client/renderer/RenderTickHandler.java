@@ -1,4 +1,4 @@
-package a01.b02.partypeople.client.renderer;
+package ca.a01.b02.partypeople.client.renderer;
 
 import java.util.EnumSet;
 

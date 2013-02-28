@@ -1,4 +1,4 @@
-package a01.b02.partypeople;
+package ca.a01.b02.partypeople;
 
 import net.minecraft.entity.player.EntityPlayer;
 

@@ -1,8 +1,9 @@
-package a01.b02.partypeople;
+package ca.a01.b02.partypeople;
 
 import java.util.HashMap;
 
-import a01.b02.partypeople.server.CommandPP;
+import ca.a01.b02.partypeople.server.CommandPP;
+
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -27,7 +28,7 @@ public class PartyPeople {
     public static PartyPeople instance;
     
     // Says where the client and server 'proxy' code is loaded.
-    @SidedProxy(clientSide="a01.b02.partypeople.client.ClientProxy", serverSide="a01.b02.partypeople.server.ServerProxy")
+    @SidedProxy(clientSide="ca.a01.b02.partypeople.client.ClientProxy", serverSide="ca.a01.b02.partypeople.server.ServerProxy")
     public static CommonProxy proxy;
     
     @PreInit
