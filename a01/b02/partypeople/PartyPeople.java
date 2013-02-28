@@ -1,6 +1,8 @@
 package a01.b02.partypeople;
 
-import a01.b02.partypeople.server.CommandPPInv;
+import java.util.HashMap;
+
+import a01.b02.partypeople.server.CommandPP;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -17,6 +19,8 @@ import cpw.mods.fml.common.network.NetworkMod;
 @Mod(modid="PartyPeople", name="PartyPeople", version="0.0.1")
 @NetworkMod(clientSideRequired=true, serverSideRequired=true)
 public class PartyPeople {
+	
+	private PartyModel pModel = new PartyModel();
 
     // The instance of your mod that Forge uses.
     @Instance("PartyPeople")
@@ -44,6 +48,6 @@ public class PartyPeople {
     
     @ServerStarting
     public void serverStarting(FMLServerStartingEvent event) {
-    	event.registerServerCommand(new CommandPPInv(this));
+    	event.registerServerCommand(new CommandPP(pModel));
     }
 }
