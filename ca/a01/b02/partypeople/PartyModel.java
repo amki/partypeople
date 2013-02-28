@@ -4,6 +4,6 @@ import java.util.HashMap;
 
 public class PartyModel {
 
-	public HashMap<Integer, Party> parties = new HashMap<Integer, Party>();
-	public static int nextPartyId = 1;
+    public HashMap<Integer, Party> parties     = new HashMap<Integer, Party>();
+    public static int              nextPartyId = 1;
 }

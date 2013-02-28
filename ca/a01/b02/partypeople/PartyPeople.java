@@ -1,9 +1,6 @@
 package ca.a01.b02.partypeople;
 
-import java.util.HashMap;
-
 import ca.a01.b02.partypeople.server.CommandPP;
-
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -17,38 +14,38 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
-@Mod(modid="PartyPeople", name="PartyPeople", version="0.0.1")
-@NetworkMod(clientSideRequired=true, serverSideRequired=true)
+@Mod(modid = "PartyPeople", name = "PartyPeople", version = "0.0.1")
+@NetworkMod(clientSideRequired = true, serverSideRequired = true)
 public class PartyPeople {
-	
-	private PartyModel pModel = new PartyModel();
+
+    private final PartyModel  pModel = new PartyModel();
 
     // The instance of your mod that Forge uses.
     @Instance("PartyPeople")
     public static PartyPeople instance;
-    
+
     // Says where the client and server 'proxy' code is loaded.
-    @SidedProxy(clientSide="ca.a01.b02.partypeople.client.ClientProxy", serverSide="ca.a01.b02.partypeople.server.ServerProxy")
+    @SidedProxy(clientSide = "ca.a01.b02.partypeople.client.ClientProxy", serverSide = "ca.a01.b02.partypeople.server.ServerProxy")
     public static CommonProxy proxy;
-    
+
     @PreInit
     public void preInit(FMLPreInitializationEvent event) {
-            // Stub Method
+        // Stub Method
     }
-    
+
     @Init
     public void load(FMLInitializationEvent event) {
-            proxy.registerRenderers();
-            proxy.registerHandlers();
+        proxy.registerRenderers();
+        proxy.registerHandlers();
     }
-    
+
     @PostInit
     public void postInit(FMLPostInitializationEvent event) {
-            // Stub Method
+        // Stub Method
     }
-    
+
     @ServerStarting
     public void serverStarting(FMLServerStartingEvent event) {
-    	event.registerServerCommand(new CommandPP(pModel));
+        event.registerServerCommand(new CommandPP(this.pModel));
     }
 }
