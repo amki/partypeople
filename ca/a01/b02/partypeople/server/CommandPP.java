@@ -62,6 +62,8 @@ public class CommandPP extends CommandBase {
                 this.handleAccept(par1ICommandSender, par2ArrayOfStr);
             } else if (par2ArrayOfStr[0].equalsIgnoreCase("decline")) {
                 this.handleDecline(par1ICommandSender, par2ArrayOfStr);
+            } else if (par2ArrayOfStr[0].equalsIgnoreCase("claim")) {
+                this.handleClaim(par1ICommandSender, par2ArrayOfStr);
             } else if (par2ArrayOfStr[0].equalsIgnoreCase("quit")) {
                 this.handleQuit(par1ICommandSender, par2ArrayOfStr);
             } else if (par2ArrayOfStr[0].equalsIgnoreCase("kick")) {
@@ -105,6 +107,10 @@ public class CommandPP extends CommandBase {
 
     public void handleDecline(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
         this.pHandler.declineParty((EntityPlayerMP) par1ICommandSender);
+    }
+
+    public void handleClaim(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
+        this.pHandler.claimParty((EntityPlayerMP) par1ICommandSender);
     }
 
     public void handleQuit(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {

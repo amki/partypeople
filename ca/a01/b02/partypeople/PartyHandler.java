@@ -69,6 +69,32 @@ public class PartyHandler {
         return null;
     }
 
+    public Party claimParty(EntityPlayerMP player) {
+        Integer pid = this.pModel.partyplayer.get(player.username);
+        if (pid == null) {
+            player.sendChatToPlayer("You are not in a party.");
+            return null;
+        }
+        Party p = this.getPartyById(pid);
+        if (p == null) {
+            // If p is null the party does not exist, remove the player from the list of partied players
+            this.pModel.partyplayer.remove(player.username);
+            player.sendChatToPlayer("You have are not in a party or the party does no longer exist.");
+            return null;
+        }
+        // If the party leader is empty
+        if (p.leader == "") {
+            // Remove the leader from the members list
+            p.members.remove(player.username);
+            // Make it leader!
+            p.leader = player.username;
+            player.sendChatToPlayer("You have claimed party lead.");
+        } else {
+            player.sendChatToPlayer("There is already an active party leader.");
+        }
+        return p;
+    }
+
     public Party quitParty(EntityPlayerMP player) {
         Party p = this.getPartyByPlayer(player);
         this.pModel.partyplayer.remove(player.username);
