@@ -1,5 +1,6 @@
 package ca.a01.b02.partypeople.server;
 
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.command.CommandBase;
@@ -28,6 +29,11 @@ public class CommandPP extends CommandBase {
         return "pp";
     }
 
+    @Override
+    public boolean canCommandSenderUseCommand(ICommandSender par1iCommandSender) {
+        return true;
+    }
+
     /**
      * Return the required permission level for this command.
      */
@@ -43,6 +49,10 @@ public class CommandPP extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
+        if (!(par1ICommandSender instanceof EntityPlayerMP)) {
+            par1ICommandSender.sendChatToPlayer("You are not an MP player, you may not party.");
+            return;
+        }
         if (par2ArrayOfStr.length > 0) {
             if (par2ArrayOfStr[0].equalsIgnoreCase("create")) {
                 this.handleCreate(par1ICommandSender, par2ArrayOfStr);
@@ -50,12 +60,18 @@ public class CommandPP extends CommandBase {
                 this.handleInvite(par1ICommandSender, par2ArrayOfStr);
             } else if (par2ArrayOfStr[0].equalsIgnoreCase("accept")) {
                 this.handleAccept(par1ICommandSender, par2ArrayOfStr);
+            } else if (par2ArrayOfStr[0].equalsIgnoreCase("decline")) {
+                this.handleDecline(par1ICommandSender, par2ArrayOfStr);
             } else if (par2ArrayOfStr[0].equalsIgnoreCase("quit")) {
                 this.handleQuit(par1ICommandSender, par2ArrayOfStr);
             } else if (par2ArrayOfStr[0].equalsIgnoreCase("kick")) {
                 this.handleKick(par1ICommandSender, par2ArrayOfStr);
             } else if (par2ArrayOfStr[0].equalsIgnoreCase("promote")) {
                 this.handlePromote(par1ICommandSender, par2ArrayOfStr);
+            } else if (par2ArrayOfStr[0].equalsIgnoreCase("list")) {
+                this.handleList(par1ICommandSender, par2ArrayOfStr);
+            } else if (par2ArrayOfStr[0].equalsIgnoreCase("debuginfo")) {
+                this.handleDebugInfo(par1ICommandSender, par2ArrayOfStr);
             } else if (par2ArrayOfStr[0].equalsIgnoreCase("debug")) {
                 this.handleDebug(par1ICommandSender, par2ArrayOfStr);
             }
@@ -63,50 +79,36 @@ public class CommandPP extends CommandBase {
     }
 
     public void handleCreate(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
-        if (par1ICommandSender instanceof EntityPlayer) {
-            Party p = this.pHandler.createParty((EntityPlayer) par1ICommandSender);
-            par1ICommandSender.sendChatToPlayer("Party with ID " + p.id + " created.");
-        } else {
-            par1ICommandSender.sendChatToPlayer("You are not a player, you can't create a party.");
-        }
+        Party p = this.pHandler.createParty((EntityPlayerMP) par1ICommandSender);
     }
 
     public void handleInvite(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
-        // If the commander is a player
-        if (par1ICommandSender instanceof EntityPlayer) {
-            // If he is in a party
-            if (((EntityPlayer) par1ICommandSender).partyId != 0) {
-                // Find the invitee
-                EntityPlayer invitee = ((EntityPlayerMP) par1ICommandSender).getServerForPlayer()
-                        .getPlayerEntityByName(par2ArrayOfStr[1]);
-                // If the invitee exists and is a player
-                if (invitee != null && invitee instanceof EntityPlayer) {
-                    Party p = this.pHandler.inviteParty((EntityPlayer) par1ICommandSender, invitee);
-                    par1ICommandSender.sendChatToPlayer("Invited player " + invitee.username + ".");
-                    invitee.sendChatToPlayer("Player " + ((EntityPlayer) par1ICommandSender).username
-                            + " has invited you to party " + p.id + ". /pp accept/decline.");
-                } else {
-                    par1ICommandSender.sendChatToPlayer("The specified player " + par2ArrayOfStr[1]
-                            + " could not be found.");
-                }
-            } else {
-                par1ICommandSender.sendChatToPlayer("You are not in a party.");
-            }
-        } else {
-            par1ICommandSender.sendChatToPlayer("You are not a player, you may not invite someone.");
+        // Find the party
+        Party p = this.pHandler.getPartyByPlayer((EntityPlayerMP) par1ICommandSender);
+        if (p == null) {
+            par1ICommandSender.sendChatToPlayer("Party not found.");
+            return;
         }
+        // Find the invitee
+        EntityPlayer invitee = ((EntityPlayerMP) par1ICommandSender).getServerForPlayer().getPlayerEntityByName(
+                par2ArrayOfStr[1]);
+        if (invitee == null || !(invitee instanceof EntityPlayerMP)) {
+            par1ICommandSender.sendChatToPlayer("Player" + par2ArrayOfStr[1] + " could not be found.");
+            return;
+        }
+        this.pHandler.invitePlayer((EntityPlayerMP) par1ICommandSender, (EntityPlayerMP) invitee);
     }
 
     public void handleAccept(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
-        this.pHandler.joinParty((EntityPlayer) par1ICommandSender);
+        this.pHandler.joinParty((EntityPlayerMP) par1ICommandSender);
     }
 
     public void handleDecline(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
-        this.pHandler.declineParty((EntityPlayer) par1ICommandSender);
+        this.pHandler.declineParty((EntityPlayerMP) par1ICommandSender);
     }
 
     public void handleQuit(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
-        par1ICommandSender.sendChatToPlayer("QUIT");
+        this.pHandler.quitParty((EntityPlayerMP) par1ICommandSender);
     }
 
     public void handleKick(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
@@ -115,6 +117,30 @@ public class CommandPP extends CommandBase {
 
     public void handlePromote(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
         par1ICommandSender.sendChatToPlayer("PROMOTE");
+    }
+
+    public void handleList(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
+        Party p = this.pHandler.getPartyByPlayer((EntityPlayerMP) par1ICommandSender);
+        if (p == null) {
+            par1ICommandSender.sendChatToPlayer("Party not found.");
+            return;
+        }
+        par1ICommandSender.sendChatToPlayer("Partylist:");
+        par1ICommandSender.sendChatToPlayer("Leader: " + p.leader);
+        par1ICommandSender.sendChatToPlayer("----------");
+        Iterator<String> players = p.members.iterator();
+        while (players.hasNext()) {
+            par1ICommandSender.sendChatToPlayer(players.next());
+        }
+    }
+
+    public void handleDebugInfo(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
+        par1ICommandSender.sendChatToPlayer("Your entityId is " + ((EntityPlayer) par1ICommandSender).entityId);
+        Party p = this.pHandler.getPartyByPlayer((EntityPlayerMP) par1ICommandSender);
+        if (p != null) {
+            par1ICommandSender.sendChatToPlayer("Your partyId is " + p.id);
+        }
+
     }
 
     public void handleDebug(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
