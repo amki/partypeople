@@ -1,20 +1,54 @@
 package ca.a01.b02.partypeople;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 
 public class PartyPlayer {
 
-    public int    entityId;
-    public String username;
-    public double posX;
-    public double posY;
-    public double posZ;
+    public int     entityId;
+    public String  username;
+    public int     health    = 5;
+    public double  posX;
+    public double  posY;
+    public double  posZ;
 
-    public PartyPlayer(EntityPlayer p) {
+    // SERVER - not transferred fields
+    public int     partyId;
+    public boolean isChanged = false;
+
+    public PartyPlayer(int partyId, EntityPlayer p) {
+        this.partyId = partyId;
         this.entityId = p.entityId;
         this.username = p.username;
         this.posX = p.posX;
         this.posY = p.posY;
         this.posZ = p.posZ;
+    }
+
+    public PartyPlayer(DataInputStream dis) throws IOException {
+        this.entityId = dis.readInt();
+        this.username = dis.readUTF();
+        this.health = dis.readInt();
+        this.posX = dis.readDouble();
+        this.posY = dis.readDouble();
+        this.posZ = dis.readDouble();
+    }
+
+    public byte[] serialize() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(baos);
+        dos.writeInt(this.entityId);
+        dos.writeUTF(this.username);
+        dos.writeInt(this.health);
+        dos.writeDouble(this.posX);
+        dos.writeDouble(this.posY);
+        dos.writeDouble(this.posZ);
+        dos.flush();
+
+        return baos.toByteArray();
     }
 }

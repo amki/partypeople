@@ -15,7 +15,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
 @Mod(modid = "PartyPeople", name = "PartyPeople", version = "0.0.1")
-@NetworkMod(clientSideRequired = true, serverSideRequired = true)
+@NetworkMod(clientSideRequired = true, serverSideRequired = true, channels = { "PPParty" }, packetHandler = PacketHandler.class)
 public class PartyPeople {
 
     private final PartyModel  pModel = new PartyModel();
@@ -36,7 +36,7 @@ public class PartyPeople {
     @Init
     public void load(FMLInitializationEvent event) {
         proxy.registerRenderers();
-        proxy.registerHandlers();
+        proxy.registerHandlers(this.pModel);
     }
 
     @PostInit
