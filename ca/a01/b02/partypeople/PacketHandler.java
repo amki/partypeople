@@ -3,10 +3,12 @@ package ca.a01.b02.partypeople;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import ca.a01.b02.partypeople.client.RenderData;
+import ca.a01.b02.partypeople.client.RenderNetworkHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
@@ -14,10 +16,12 @@ import cpw.mods.fml.relauncher.Side;
 
 public class PacketHandler implements IPacketHandler {
 
-    private final RenderData rData;
+    private final RenderData           rData;
+    private final RenderNetworkHandler rHandler;
 
     public PacketHandler() {
         this.rData = RenderData.instance();
+        this.rHandler = RenderNetworkHandler.instance();
     }
 
     @Override
@@ -43,8 +47,7 @@ public class PacketHandler implements IPacketHandler {
                     break;
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            // Packet was sent borkzored... Just drop it like it's hot
         }
     }
 
@@ -52,17 +55,18 @@ public class PacketHandler implements IPacketHandler {
         System.out.println("Got party join packet!");
         byte playerc = dis.readByte();
         System.out.println("Found " + playerc + " players!");
+        ArrayList<PartyPlayer> players = new ArrayList<PartyPlayer>();
         for (int i = 1; i <= playerc; i++) {
             PartyPlayer p = new PartyPlayer(dis);
             System.out.println("Found player " + p.username);
-            this.rData.partyplayers.put(p.username, p);
+            players.add(p);
         }
+        this.rHandler.joinParty(players);
     }
 
     private void handlePartyLeave(DataInputStream dis) {
         System.out.println("Got party leave packet!");
-        // Clear the map since we don't care about the party when we leave
-        this.rData.partyplayers.clear();
+        this.rHandler.leaveParty();
     }
 
     private void handlePartyUpdate(DataInputStream dis) throws IOException {
@@ -70,23 +74,21 @@ public class PacketHandler implements IPacketHandler {
         byte subcode = dis.readByte();
         byte playerc = dis.readByte();
         System.out.println("Found " + playerc + " players!");
-        PartyPlayer pp;
+        ArrayList<PartyPlayer> players = new ArrayList<PartyPlayer>();
+        for (int i = 1; i <= playerc; i++) {
+            PartyPlayer pp = new PartyPlayer(dis);
+            players.add(pp);
+        }
         switch (subcode) {
             case PartyModel.SUBCODE_PLAYER_UPDATE:
-                pp = new PartyPlayer(dis);
-                System.out.println("\t This was a player update for " + pp.username);
+                this.rHandler.playerPartyUpdate(players);
                 break;
             case PartyModel.SUBCODE_PLAYER_JOIN:
-                pp = new PartyPlayer(dis);
-                this.rData.partyplayers.put(pp.username, pp);
-                System.out.println("\t Player " + pp.username + " joined!");
+                this.rHandler.playerPartyJoin(players);
                 break;
             case PartyModel.SUBCODE_PLAYER_LEAVE:
-                pp = new PartyPlayer(dis);
-                this.rData.partyplayers.remove(pp.username);
-                System.out.println("\t Player " + pp.username + " left!");
+                this.rHandler.playerPartyLeave(players);
                 break;
         }
-
     }
 }
