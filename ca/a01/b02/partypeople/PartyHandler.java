@@ -10,8 +10,8 @@ public class PartyHandler {
 
     private final PartyModel pModel;
 
-    public PartyHandler(PartyModel pModel) {
-        this.pModel = pModel;
+    public PartyHandler() {
+        this.pModel = PartyModel.instance();
     }
 
     public Party createParty(EntityPlayerMP leader) {
@@ -116,17 +116,10 @@ public class PartyHandler {
 
     public Party quitParty(EntityPlayerMP player) {
         Party p = this.getPartyByPlayer(player);
-        this.pModel.partyplayer.remove(player.username);
         if (p == null) {
             player.sendChatToPlayer("Either you were not in a party or it has stopped existing.");
             return null;
         }
-        if (p.members.contains(player.username)) {
-            p.members.remove(player.username);
-        } else {
-            p.leader = "";
-        }
-        player.sendChatToPlayer("You have left party " + p.id);
         try {
             this.sendPartyLeave(p, player);
             this.sendPartyPlayerLeave(p, player);
@@ -134,6 +127,13 @@ public class PartyHandler {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        this.pModel.partyplayer.remove(player.username);
+        if (p.members.contains(player.username)) {
+            p.members.remove(player.username);
+        } else {
+            p.leader = "";
+        }
+        player.sendChatToPlayer("You have left party " + p.id);
         return p;
     }
 

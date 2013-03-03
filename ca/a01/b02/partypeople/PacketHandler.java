@@ -3,7 +3,6 @@ package ca.a01.b02.partypeople;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -21,7 +20,7 @@ public class PacketHandler implements IPacketHandler {
     }
 
     public void init(RenderData rData) {
-        this.rData = rData;
+        this.rData = RenderData.instance();
     }
 
     @Override
@@ -56,18 +55,17 @@ public class PacketHandler implements IPacketHandler {
         System.out.println("Got party join packet!");
         byte playerc = dis.readByte();
         System.out.println("Found " + playerc + " players!");
-        ArrayList<PartyPlayer> players = new ArrayList<PartyPlayer>();
         for (int i = 1; i <= playerc; i++) {
             PartyPlayer p = new PartyPlayer(dis);
             System.out.println("Found player " + p.username);
-            players.add(p);
+            this.rData.partyplayers.put(p.username, p);
         }
-        // bawki: TODO: players contains all players currently in party. DO SOMETHING
     }
 
     private void handlePartyLeave(DataInputStream dis) {
         System.out.println("Got party leave packet!");
-        // bawki: TODO: we have left the party... DO SOMETHING
+        // Clear the map since we don't care about the party when we leave
+        this.rData.partyplayers.clear();
     }
 
     private void handlePartyUpdate(DataInputStream dis) throws IOException {
@@ -83,10 +81,12 @@ public class PacketHandler implements IPacketHandler {
                 break;
             case PartyModel.SUBCODE_PLAYER_JOIN:
                 pp = new PartyPlayer(dis);
+                this.rData.partyplayers.put(pp.username, pp);
                 System.out.println("\t Player " + pp.username + " joined!");
                 break;
             case PartyModel.SUBCODE_PLAYER_LEAVE:
                 pp = new PartyPlayer(dis);
+                this.rData.partyplayers.remove(pp.username);
                 System.out.println("\t Player " + pp.username + " left!");
                 break;
         }

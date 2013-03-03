@@ -6,7 +6,7 @@ public class CommonProxy {
 
     }
 
-    public void registerHandlers(PartyModel pModel) {
+    public void registerHandlers() {
         // TODO Auto-generated method stub
 
     }

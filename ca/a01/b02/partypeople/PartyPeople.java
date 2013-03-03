@@ -1,6 +1,5 @@
 package ca.a01.b02.partypeople;
 
-import ca.a01.b02.partypeople.client.RenderData;
 import ca.a01.b02.partypeople.server.CommandPP;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -19,9 +18,6 @@ import cpw.mods.fml.common.network.NetworkMod;
 @NetworkMod(clientSideRequired = true, serverSideRequired = true, channels = { "PPParty" }, packetHandler = PacketHandler.class)
 public class PartyPeople {
 
-    private final PartyModel  pModel = new PartyModel();
-    private final RenderData  rData  = new RenderData();
-
     // The instance of your mod that Forge uses.
     @Instance("PartyPeople")
     public static PartyPeople instance;
@@ -38,7 +34,7 @@ public class PartyPeople {
     @Init
     public void load(FMLInitializationEvent event) {
         proxy.registerRenderers();
-        proxy.registerHandlers(this.pModel);
+        proxy.registerHandlers();
     }
 
     @PostInit
@@ -48,6 +44,6 @@ public class PartyPeople {
 
     @ServerStarting
     public void serverStarting(FMLServerStartingEvent event) {
-        event.registerServerCommand(new CommandPP(this.pModel));
+        event.registerServerCommand(new CommandPP());
     }
 }

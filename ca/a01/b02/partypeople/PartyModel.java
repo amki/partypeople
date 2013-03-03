@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 public class PartyModel {
 
+    private static PartyModel           instance               = new PartyModel();
+
     public final static String          CHANNEL_PPPARTY        = "PPParty";
     public final static byte            OPCODE_PARTY_JOIN      = 0;
     public final static byte            OPCODE_PARTY_LEAVE     = 1;
@@ -19,4 +21,8 @@ public class PartyModel {
     public HashMap<String, PartyPlayer> partyplayer            = new HashMap<String, PartyPlayer>();
     public HashMap<String, Integer>     inviteplayer           = new HashMap<String, Integer>();
     public static int                   nextPartyId            = 1;
+
+    public static PartyModel instance() {
+        return instance;
+    }
 }

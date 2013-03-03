@@ -19,8 +19,8 @@ public class PlayerTickHandler implements ITickHandler {
 
     private final PartyModel pModel;
 
-    public PlayerTickHandler(PartyModel pModel) {
-        this.pModel = pModel;
+    public PlayerTickHandler() {
+        this.pModel = PartyModel.instance();
     }
 
     @Override

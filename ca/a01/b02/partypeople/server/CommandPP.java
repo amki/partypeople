@@ -18,10 +18,10 @@ public class CommandPP extends CommandBase {
     private final PartyModel   pModel;
     private final PartyHandler pHandler;
 
-    public CommandPP(PartyModel pModel) {
+    public CommandPP() {
         super();
-        this.pModel = pModel;
-        this.pHandler = new PartyHandler(this.pModel);
+        this.pModel = PartyModel.instance();
+        this.pHandler = new PartyHandler();
     }
 
     @Override
