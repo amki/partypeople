@@ -12,6 +12,7 @@ public class PartyPlayer {
     public int     entityId;
     public String  username;
     public int     health;
+    public int     dimension;
     public double  posX;
     public double  posY;
     public double  posZ;
@@ -26,6 +27,7 @@ public class PartyPlayer {
         this.entityId = p.entityId;
         this.username = p.username;
         this.health = p.getHealth();
+        this.dimension = p.dimension;
         this.posX = p.posX;
         this.posY = p.posY;
         this.posZ = p.posZ;
@@ -35,6 +37,7 @@ public class PartyPlayer {
         this.entityId = dis.readInt();
         this.username = dis.readUTF();
         this.health = dis.readInt();
+        this.dimension = dis.readInt();
         this.posX = dis.readDouble();
         this.posY = dis.readDouble();
         this.posZ = dis.readDouble();
@@ -46,6 +49,7 @@ public class PartyPlayer {
         dos.writeInt(this.entityId);
         dos.writeUTF(this.username);
         dos.writeInt(this.health);
+        dos.writeInt(this.dimension);
         dos.writeDouble(this.posX);
         dos.writeDouble(this.posY);
         dos.writeDouble(this.posZ);

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import ca.a01.b02.partypeople.client.RenderData;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
@@ -14,7 +15,13 @@ import cpw.mods.fml.relauncher.Side;
 
 public class PacketHandler implements IPacketHandler {
 
+    private RenderData rData;
+
     public PacketHandler() {
+    }
+
+    public void init(RenderData rData) {
+        this.rData = rData;
     }
 
     @Override
