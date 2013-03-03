@@ -68,16 +68,19 @@ public class PacketHandler implements IPacketHandler {
         byte subcode = dis.readByte();
         byte playerc = dis.readByte();
         System.out.println("Found " + playerc + " players!");
+        PartyPlayer pp;
         switch (subcode) {
             case PartyModel.SUBCODE_PLAYER_UPDATE:
-                PartyPlayer pp = new PartyPlayer(dis);
+                pp = new PartyPlayer(dis);
                 System.out.println("\t This was a player update for " + pp.username);
                 break;
             case PartyModel.SUBCODE_PLAYER_JOIN:
-                System.out.println("\t This was player join");
+                pp = new PartyPlayer(dis);
+                System.out.println("\t Player " + pp.username + " joined!");
                 break;
             case PartyModel.SUBCODE_PLAYER_LEAVE:
-                System.out.println("\t This was player leave");
+                pp = new PartyPlayer(dis);
+                System.out.println("\t Player " + pp.username + " left!");
                 break;
         }
 

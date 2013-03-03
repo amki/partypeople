@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import ca.a01.b02.partypeople.NetworkHelper;
+import ca.a01.b02.partypeople.Party;
+import ca.a01.b02.partypeople.PartyHandler;
 import ca.a01.b02.partypeople.PartyModel;
 import ca.a01.b02.partypeople.PartyPlayer;
 import cpw.mods.fml.common.ITickHandler;
@@ -62,7 +65,8 @@ public class PlayerTickHandler implements ITickHandler {
             dos.writeByte(1);
             dos.write(pp.serialize());
             baos.flush();
-            NetworkHelper.sendToPlayer(baos, player);
+            Party party = PartyHandler.getPartyByPlayer(this.pModel, (EntityPlayerMP) player);
+            NetworkHelper.broadcastToPartyExceptPlayer(baos, party, (EntityPlayerMP) player);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

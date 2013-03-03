@@ -66,6 +66,7 @@ public class PartyHandler {
         this.pModel.partyplayer.put(player.username, pp);
         try {
             this.sendPartyJoin(p, player);
+            this.sendPartyPlayerJoin(p, player);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -128,6 +129,7 @@ public class PartyHandler {
         player.sendChatToPlayer("You have left party " + p.id);
         try {
             this.sendPartyLeave(p, player);
+            this.sendPartyPlayerLeave(p, player);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -157,11 +159,17 @@ public class PartyHandler {
         NetworkHelper.sendToPlayer(baos, player);
     }
 
-    private void sendPartyNewPlayer(Party party, PartyPlayer player) throws IOException {
+    private void sendPartyPlayerJoin(Party party, EntityPlayerMP player) throws IOException {
+        // Build the packet containing the new player
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
         dos.writeByte(this.pModel.OPCODE_PARTY_UPDATE);
         dos.writeByte(this.pModel.SUBCODE_PLAYER_JOIN);
+        dos.writeByte(1);
+        PartyPlayer pp = this.pModel.partyplayer.get(player.username);
+        dos.write(pp.serialize());
+        dos.flush();
+        NetworkHelper.broadcastToPartyExceptPlayer(baos, party, player);
     }
 
     private void sendPartyLeave(Party party, EntityPlayerMP player) throws IOException {
@@ -170,6 +178,18 @@ public class PartyHandler {
         dos.writeByte(this.pModel.OPCODE_PARTY_LEAVE);
         dos.flush();
         NetworkHelper.sendToPlayer(baos, player);
+    }
+
+    private void sendPartyPlayerLeave(Party party, EntityPlayerMP player) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(baos);
+        dos.writeByte(this.pModel.OPCODE_PARTY_UPDATE);
+        dos.writeByte(this.pModel.SUBCODE_PLAYER_LEAVE);
+        dos.writeByte(1);
+        PartyPlayer pp = this.pModel.partyplayer.get(player.username);
+        dos.write(pp.serialize());
+        dos.flush();
+        NetworkHelper.broadcastToPartyExceptPlayer(baos, party, player);
     }
 
     public Party getPartyByPlayer(EntityPlayerMP player) {
@@ -181,7 +201,20 @@ public class PartyHandler {
         return this.getPartyById(pp.partyId);
     }
 
+    public static Party getPartyByPlayer(PartyModel pModel, EntityPlayerMP player) {
+        PartyPlayer pp = pModel.partyplayer.get(player.username);
+        if (pp == null) {
+            player.sendChatToPlayer("You are not in a party.");
+            return null;
+        }
+        return getPartyById(pModel, pp.partyId);
+    }
+
     public Party getPartyById(int id) {
         return this.pModel.parties.get(id);
+    }
+
+    public static Party getPartyById(PartyModel pModel, int id) {
+        return pModel.parties.get(id);
     }
 }
