@@ -85,6 +85,10 @@ public class CommandPP extends CommandBase {
     }
 
     public void handleInvite(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
+        if (((EntityPlayerMP) par1ICommandSender).username.equalsIgnoreCase(par2ArrayOfStr[1])) {
+            par1ICommandSender.sendChatToPlayer("You can't invite yourself, sorry. :(");
+            return;
+        }
         // Find the party
         Party p = this.pHandler.getPartyByPlayer((EntityPlayerMP) par1ICommandSender);
         if (p == null) {

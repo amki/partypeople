@@ -18,6 +18,7 @@ public class PartyPlayer {
 
     // SERVER - not transferred fields
     public int     partyId;
+    public long    lastSent  = 0;
     public boolean isChanged = false;
 
     public PartyPlayer(int partyId, EntityPlayer p) {

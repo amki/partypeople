@@ -36,6 +36,10 @@ public class PlayerTickHandler implements ITickHandler {
             if (pp == null) {
                 return;
             }
+            // If it is not yet time to resend
+            if (System.currentTimeMillis() - pp.lastSent < PartyModel.PLAYER_UPDATE_COOLDOWN) {
+                return;
+            }
             boolean isChanged = false;
             if (Math.abs(p.posX - pp.posX) > 0.1) {
                 isChanged = true;
@@ -50,6 +54,7 @@ public class PlayerTickHandler implements ITickHandler {
                 pp.posZ = p.posZ;
             }
             if (isChanged) {
+                pp.lastSent = System.currentTimeMillis();
                 this.sendUpdatePacket(p, pp);
             }
         }
