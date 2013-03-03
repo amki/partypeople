@@ -14,12 +14,9 @@ import cpw.mods.fml.relauncher.Side;
 
 public class PacketHandler implements IPacketHandler {
 
-    private RenderData rData;
+    private final RenderData rData;
 
     public PacketHandler() {
-    }
-
-    public void init(RenderData rData) {
         this.rData = RenderData.instance();
     }
 
