@@ -11,7 +11,7 @@ public class PartyPlayer {
 
     public int     entityId;
     public String  username;
-    public int     health    = 5;
+    public int     health;
     public double  posX;
     public double  posY;
     public double  posZ;
@@ -24,6 +24,7 @@ public class PartyPlayer {
         this.partyId = partyId;
         this.entityId = p.entityId;
         this.username = p.username;
+        this.health = p.getHealth();
         this.posX = p.posX;
         this.posY = p.posY;
         this.posZ = p.posZ;
