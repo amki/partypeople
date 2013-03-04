@@ -43,7 +43,18 @@ public class PartyPlayer {
         this.posZ = dis.readDouble();
     }
 
-    public byte[] serialize() throws IOException {
+    public PartyPlayer(PartyPlayer p) {
+    	this.partyId = p.partyId;
+        this.entityId = p.entityId;
+        this.username = p.username;
+        this.health = p.health;
+        this.dimension = p.dimension;
+        this.posX = p.posX;
+        this.posY = p.posY;
+        this.posZ = p.posZ;
+	}
+
+	public byte[] serialize() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
         dos.writeInt(this.entityId);

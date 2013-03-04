@@ -5,6 +5,9 @@ import java.util.Collections;
 
 import org.lwjgl.opengl.GL11;
 
+import ca.a01.b02.partypeople.PartyPlayer;
+import ca.a01.b02.partypeople.client.RenderData;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
@@ -14,14 +17,16 @@ import net.minecraft.entity.Entity;
 
 public class RenderPlayerTag extends Render {
 	final Minecraft mc;
+	RenderData rawData;
 	ArrayList<VisiblePlayerPosition> positions;
 	double far = 1.0D;
 	double _d = 1.0D;
 	public RenderPlayerTag(Minecraft mc) {
 		this.mc = mc;
+		rawData = RenderData.instance();
 		positions = new ArrayList();
-	      this.far = ((512 >> this.mc.gameSettings.renderDistance) * 0.8D);
-	      this._d = (1.0D / (256 >> this.mc.gameSettings.renderDistance));
+	    this.far = ((512 >> this.mc.gameSettings.renderDistance) * 0.8D);
+	    this._d = (1.0D / (256 >> this.mc.gameSettings.renderDistance));
 	}
 
 	@Override
@@ -31,9 +36,9 @@ public class RenderPlayerTag extends Render {
 		
 		// prepare list
 		
-		for(PlayerPosition pos : )
+		for(PartyPlayer p: rawData.partyplayers.values())
 		{
-			positions.add(new VisiblePlayerPosition(pos, 1));
+			positions.add(new VisiblePlayerPosition(p, 1));
 		}
 		
 		if(positions.isEmpty())
@@ -52,7 +57,7 @@ public class RenderPlayerTag extends Render {
 	    FontRenderer fontrenderer = getFontRendererFromRenderManager();
 	    GL11.glPushMatrix();
 	    StringBuilder sb = new StringBuilder();
-	    sb.append(v.name);
+	    sb.append(v.username);
 	    sb.append(String.format("[%1.2fm]", new Object[] { Double.valueOf(v.distance) }));
 
 	    String str = sb.toString();
@@ -158,7 +163,7 @@ public class RenderPlayerTag extends Render {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glPopMatrix();
 	 */
-	private class VisiblePlayerPosition extends PlayerPosition
+	private class VisiblePlayerPosition extends PartyPlayer
 	implements Comparable
 	{
 	    double dx;
@@ -167,12 +172,11 @@ public class RenderPlayerTag extends Render {
 	    double dl;
 	    double distance;
 	    
-		public VisiblePlayerPosition(PlayerPosition pos, double dscale) {
-			
-			super(pos);
-			this.dx = (pos.x * dscale - renderManager.renderPosX + 0.5D);
-			this.dy = (pos.y - renderManager.renderPosY + 0.5D);
-			this.dz = (pos.z * dscale - renderManager.renderPosZ + 0.5D);
+		public VisiblePlayerPosition(PartyPlayer p, double dscale) {
+			super(p);
+			this.dx = (p.posX * dscale - renderManager.renderPosX + 0.5D);
+			this.dy = (p.posY - renderManager.renderPosY + 0.5D);
+			this.dz = (p.posZ * dscale - renderManager.renderPosZ + 0.5D);
 			this.dl = (this.distance = Math.sqrt(this.dx * this.dx + this.dy * this.dy + this.dz * this.dz));
 			double d;
 			if (this.dl > RenderPlayerTag.this.far)
