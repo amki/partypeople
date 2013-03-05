@@ -16,11 +16,16 @@ import cpw.mods.fml.relauncher.Side;
 
 public class PacketHandler implements IPacketHandler {
 
-    private final RenderData           rData;
-    private final RenderNetworkHandler rHandler;
+    private final RenderData     rData;
+    private RenderNetworkHandler rHandler = null;
 
     public PacketHandler() {
         this.rData = RenderData.instance();
+        Side side = FMLCommonHandler.instance().getEffectiveSide();
+        // If this is not a client we're done here.
+        if (side != Side.CLIENT) {
+            return;
+        }
         this.rHandler = RenderNetworkHandler.instance();
     }
 
