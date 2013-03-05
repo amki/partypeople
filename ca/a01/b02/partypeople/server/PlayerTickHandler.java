@@ -53,6 +53,10 @@ public class PlayerTickHandler implements ITickHandler {
                 isChanged = true;
                 pp.posZ = p.posZ;
             }
+            if (pp.health != p.getHealth()) {
+                pp.health = p.getHealth();
+                isChanged = true;
+            }
             if (isChanged) {
                 pp.lastSent = System.currentTimeMillis();
                 this.sendUpdatePacket(p, pp);
