@@ -25,14 +25,12 @@ public class RenderPlayerTag extends Render {
 		rawData = RenderData.instance();
 	    this.far = ((512 >> this.mc.gameSettings.renderDistance) * 0.8D);
 	    this._d = (1.0D / (256 >> this.mc.gameSettings.renderDistance));
-	    System.out.println("created new RenderPlayerTag");
 	}
 
 	@Override
 	public void doRender(Entity var1, double var2, double var4, double var6,
 			float var8, float var9) {
 		EntityNameTag entity = (EntityNameTag)var1;
-		System.out.println("rendering entity with name: "+entity.p.username+" at x: "+entity.p.posX+" y: "+entity.p.posY+" z: "+entity.p.posZ);
         FontRenderer var12 = this.getFontRendererFromRenderManager();
         float var13 = 1.6F;
         float var14 = 0.016666668F * var13;

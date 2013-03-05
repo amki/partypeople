@@ -23,9 +23,12 @@ public class RenderNetworkHandler {
     public void joinParty(ArrayList<PartyPlayer> players) {
         for (PartyPlayer p : players) {
             this.rData.partyplayers.put(p.username, p);
-            EntityNameTag nameTag = new EntityNameTag(p);
-            Minecraft.getMinecraft().theWorld.spawnEntityInWorld(nameTag);
-            this.rData.nametags.put(p.username, nameTag);
+            if(!p.username.equalsIgnoreCase(Minecraft.getMinecraft().thePlayer.username))
+            {
+            	EntityNameTag nameTag = new EntityNameTag(p);
+            	Minecraft.getMinecraft().theWorld.spawnEntityInWorld(nameTag);
+            	this.rData.nametags.put(p.username, nameTag);
+            }
         }
         System.out.println("I have joined a party!");
     }
@@ -45,9 +48,12 @@ public class RenderNetworkHandler {
             this.rData.partyplayers.put(p.username, p);
             System.out.println("Player " + p.username + " joined!");
             // TODO: WHAT DO WE SAY TO FIXING COPY PASTA CODE: not today! 
-            EntityNameTag nameTag = new EntityNameTag(p);
-            Minecraft.getMinecraft().theWorld.spawnEntityInWorld(nameTag);
-            this.rData.nametags.put(p.username, nameTag);
+            if(!p.username.equalsIgnoreCase(Minecraft.getMinecraft().thePlayer.username))
+            {
+	            EntityNameTag nameTag = new EntityNameTag(p);
+	            Minecraft.getMinecraft().theWorld.spawnEntityInWorld(nameTag);
+	            this.rData.nametags.put(p.username, nameTag);
+            }
         }
     }
 

@@ -9,14 +9,17 @@ import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
 public class RenderTickHandler implements ITickHandler {
-	boolean init = false;
+	private PartyHudRenderer hudRenderer;
+	
+	public RenderTickHandler() {
+		hudRenderer = new PartyHudRenderer();
+	}
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
 	}
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
 		EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
 		if (player != null) {
-			GLHelper.drawString("Krebskopf", 10, 15);
-			GLHelper.drawIcon("/gui/icons.png", 10, 25, 52, 0,9,9);
+			hudRenderer.drawHud(10, 15);
 		}
 	}
 	public EnumSet<TickType> ticks() {
