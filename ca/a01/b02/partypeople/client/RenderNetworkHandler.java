@@ -2,7 +2,10 @@ package ca.a01.b02.partypeople.client;
 
 import java.util.ArrayList;
 
+import net.minecraft.client.Minecraft;
+
 import ca.a01.b02.partypeople.PartyPlayer;
+import ca.a01.b02.partypeople.client.renderer.EntityNameTag;
 
 public class RenderNetworkHandler {
 
@@ -22,6 +25,7 @@ public class RenderNetworkHandler {
             this.rData.partyplayers.put(p.username, p);
         }
         System.out.println("I have joined a party!");
+        Minecraft.getMinecraft().theWorld.spawnEntityInWorld(new EntityNameTag(Minecraft.getMinecraft().theWorld));
     }
 
     public void leaveParty() {
