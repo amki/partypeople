@@ -21,26 +21,27 @@ public class PartyHudRenderer {
 	
 	private void drawPlayerFrame(PartyPlayer p, int x, int y) {
 		GLHelper.drawString(p.username, x, y);
-		drawHealthBar(p, x, y+7);
-		
+		drawHealthBar(p, x-2, y+8);
 	}
 	private void drawHealthBar(PartyPlayer p, int x, int y) {
 		int numhearts = (int) Math.floor(p.health/2);
 		// draw empty hearts
+		GLHelper.startDrawIcon("/gui/icons.png");
 		for(int i = 0; i < 10; i++) {
-			GLHelper.drawIcon("/gui/icons.png", x+(i*HUD_HEALTH_SPACING), y, 16, 0,9,9);
+			GLHelper.drawTexturedModalRect(x+(i*HUD_HEALTH_SPACING), y, 16, 0,9,9);
 		}
 		
 		// draw full hearts
 		int i;
 		for(i = 0; i < numhearts; i++) {
-			GLHelper.drawIcon("/gui/icons.png", x+(i*HUD_HEALTH_SPACING), y, 52, 0,9,9);
+			GLHelper.drawTexturedModalRect(x+(i*HUD_HEALTH_SPACING), y, 52, 0,9,9);
 		}
 		
 		if(p.health%2 != 0)
 		{
-			GLHelper.drawIcon("/gui/icons.png", x+(i*HUD_HEALTH_SPACING), y, 61, 0,9,9);
+			GLHelper.drawTexturedModalRect(x+(i*HUD_HEALTH_SPACING), y, 61, 0,9,9);
 		}
+		GLHelper.endDrawIcon();
 		
 	}
 }

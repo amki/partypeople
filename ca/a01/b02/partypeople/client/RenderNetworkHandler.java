@@ -67,6 +67,7 @@ public class RenderNetworkHandler {
             pp.dimension = p.dimension;
             pp.health = p.health;
             pp.entityId = p.entityId;
+
             // update entity position with new player position data!
             this.rData.nametags.get(p.username).updatePosition();
         }

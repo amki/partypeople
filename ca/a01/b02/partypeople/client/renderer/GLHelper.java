@@ -38,6 +38,7 @@ public class GLHelper {
 	public static void drawString(String s, double x, double y) {
 		RenderHelper.disableStandardItemLighting();
 		getFontRenderer().drawStringWithShadow(s, (int) x, (int) y, new Colour(1, 1, 1, 1).getInt());
+		RenderHelper.enableStandardItemLighting();
 	}
 	
 	/***
@@ -51,6 +52,7 @@ public class GLHelper {
 	 * @param width size of the partial image in the .png file
 	 * @param height size of the partial image in the .png file
 	 */
+	@Deprecated
 	public static void drawIcon(String texName, double x, double y, int horOffset, int vertOffset, int width, int height) {
 		GL11.glPushMatrix();
 		GL11.glDisable(GL11.GL_LIGHTING);
@@ -60,6 +62,25 @@ public class GLHelper {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, Minecraft.getMinecraft().renderEngine.getTexture(texName));
 		drawTexturedModalRect((int)x, (int)y, horOffset, vertOffset, width, height);
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glPopMatrix();
+	}
+	
+	public static void startDrawIcon(String texName) {
+		GL11.glPushMatrix();
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_CULL_FACE);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, Minecraft.getMinecraft().renderEngine.getTexture(texName));
+	}
+	
+	public static void endDrawIcon() {
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_CULL_FACE);
