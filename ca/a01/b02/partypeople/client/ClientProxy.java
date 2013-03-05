@@ -1,6 +1,7 @@
 package ca.a01.b02.partypeople.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.common.MinecraftForge;
 import ca.a01.b02.partypeople.CommonProxy;
 import ca.a01.b02.partypeople.client.renderer.EntityNameTag;
 import ca.a01.b02.partypeople.client.renderer.RenderPlayerTag;
@@ -19,7 +20,6 @@ public class ClientProxy extends CommonProxy {
         System.out.println("registered renderer");
         RenderTickHandler renderTickHandler = new RenderTickHandler();
         TickRegistry.registerTickHandler(renderTickHandler, Side.CLIENT);
-        PlayerTickHandler playerTickHandler = new PlayerTickHandler();
-        TickRegistry.registerTickHandler(playerTickHandler, Side.CLIENT);
+        MinecraftForge.EVENT_BUS.register(new LivingUpdateHandler());
     }
 }
