@@ -14,7 +14,8 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void registerHandlers() {
         super.registerHandlers();
-        RenderingRegistry.registerEntityRenderingHandler(EntityNameTag.class, new RenderPlayerTag(Minecraft.getMinecraft()));
+        RenderingRegistry.registerEntityRenderingHandler(EntityNameTag.class, new RenderPlayerTag());
+        System.out.println("registered renderer");
         RenderTickHandler renderTickHandler = new RenderTickHandler();
         TickRegistry.registerTickHandler(renderTickHandler, Side.CLIENT);
     }

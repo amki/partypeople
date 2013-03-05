@@ -2,25 +2,37 @@ package ca.a01.b02.partypeople.client.renderer;
 
 import java.util.Vector;
 
+import ca.a01.b02.partypeople.PartyPlayer;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 public class EntityNameTag extends Entity {
-	public String playerName;
+	public PartyPlayer p;
 	public int playerDistance;
-	public int x;
-	public int y;
-	public int z;
-	public EntityNameTag(World par1World) {
-		super(par1World);
-		// TODO Auto-generated constructor stub
+	public EntityNameTag(PartyPlayer p) {
+		super(Minecraft.getMinecraft().theWorld);
+		this.p = p;
+		setSize(0.0F, 0.0F);
+		setPosition(p.posX, p.posY, p.posZ);
+		this.ignoreFrustumCheck = true;
 	}
 
+	public void updatePosition() {
+		setPosition(p.posX, p.posY, p.posZ);
+	}
+	
+	@Override
+	public boolean isInRangeToRenderVec3D(net.minecraft.util.Vec3 par1Vec3) {
+		return true;
+	};
+	
 	@Override
 	protected void entityInit() {
 		// TODO Auto-generated method stub
-
+		setPosition(Minecraft.getMinecraft().thePlayer.posX, Minecraft.getMinecraft().thePlayer.posY, Minecraft.getMinecraft().thePlayer.posZ);
 	}
 
 	@Override
