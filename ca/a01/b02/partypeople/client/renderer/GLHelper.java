@@ -36,9 +36,12 @@ public class GLHelper {
     }
 	
 	public static void drawString(String s, double x, double y) {
-		RenderHelper.disableStandardItemLighting();
-		getFontRenderer().drawStringWithShadow(s, (int) x, (int) y, new Colour(1, 1, 1, 1).getInt());
-		RenderHelper.enableStandardItemLighting();
+        GL11.glPushMatrix();
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        getFontRenderer().drawStringWithShadow(s, (int) x, (int) y, new Colour(1, 1, 1, 1).getInt());
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glPopMatrix();
 	}
 	
 	/***

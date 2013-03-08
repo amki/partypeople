@@ -1,5 +1,7 @@
 package ca.a01.b02.partypeople.client.renderer;
 
+import org.lwjgl.opengl.GL11;
+
 import ca.a01.b02.partypeople.PartyPlayer;
 import ca.a01.b02.partypeople.client.RenderData;
 import net.minecraft.client.Minecraft;
@@ -13,9 +15,16 @@ public class PartyHudRenderer {
 	}
 	
 	public void drawHud(int x, int y) {
+		// Todo: find out what is fucking up my shit when mixing drawString with drawIcon...
+		int dy = y;
 		for(PartyPlayer p : rData.partyplayers.values()) {
-			drawPlayerFrame(p, x, y);
-			y += HUD_SPACING;
+			GLHelper.drawString(p.username, x, dy);
+			dy += HUD_SPACING;
+		}
+		dy = y;
+		for(PartyPlayer p : rData.partyplayers.values()) {
+			drawHealthBar(p, x-2, dy+8);
+			dy += HUD_SPACING;
 		}
 	}
 	
