@@ -26,6 +26,7 @@ public class EntityNameTag extends Entity {
 	
 	@Override
 	public boolean isInRangeToRenderVec3D(net.minecraft.util.Vec3 par1Vec3) {
+		// Todo: find a good way to render the EntityNameTag when out of visible range
 		return true;
 	};
 	
