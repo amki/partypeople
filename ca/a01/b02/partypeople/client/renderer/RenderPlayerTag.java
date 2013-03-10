@@ -20,13 +20,9 @@ import net.minecraft.entity.Entity;
 public class RenderPlayerTag extends Render {
 	Minecraft mc;
 	RenderData rawData;
-	double far = 1.0D;
-	double _d = 1.0D;
 	public RenderPlayerTag() {
 		this.mc = Minecraft.getMinecraft();
 		rawData = RenderData.instance();
-	    this.far = ((512 >> this.mc.gameSettings.renderDistance) * 0.8D);
-	    this._d = (1.0D / (256 >> this.mc.gameSettings.renderDistance));
 	}
 
 	@Override
@@ -39,17 +35,25 @@ public class RenderPlayerTag extends Render {
         FontRenderer fontRenderer = this.getFontRendererFromRenderManager();
         float var13 = 1.6F;
         float var14 = 0.016666668F * var13;
+        
+        // start render code
         GL11.glPushMatrix();
+        // move to x,y,z of player(+2.3F is the height above the playerY coordinate) => makes the nameplate float above the player
         GL11.glTranslatef((float)var2 + 0.0F, (float)var4 + 2.3F, (float)var6);
         GL11.glNormal3f(0.0F, 1.0F, 0.0F);
+        // rotate the face of our nameplate towards the player
         GL11.glRotatef(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
         GL11.glScalef(-var14, -var14, var14);
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDepthMask(false);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
+        
+        // makes the nameplates always visible(even behind blocks)
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glBlendFunc(GL11.GL_ONE,GL11.GL_ZERO);
+        
+        // start drawing the little boxes around our nameplates
         Tessellator tesselator = Tessellator.instance;
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         tesselator.startDrawingQuads();
@@ -66,6 +70,7 @@ public class RenderPlayerTag extends Render {
         tesselator.addVertex((double)(stringWidth + 1), (double)(8), 0.0D);
         tesselator.draw();
 
+        // start drawing the name and distance strings
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         fontRenderer.drawString(entity.p.username, -fontRenderer.getStringWidth(entity.p.username) / 2, 0, 553648127);
         fontRenderer.drawString(dstString, -fontRenderer.getStringWidth(dstString) / 2, 9, 553648127);
@@ -78,7 +83,6 @@ public class RenderPlayerTag extends Render {
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glPopMatrix();
-
 	}
 }
 
